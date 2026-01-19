@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+
+    <title>Kuroku</title>
+    
+    <style>
+        :root{
+            --theme-green: #61e79b;
+
+            --white: white;
+            --black: black;
+
+            /* 'Segoe UI' */
+        }
+    </style>
+    
+</head>
+<body>
+
+    <div class="welcome-text"><h1 id="welcome-text-id">Welcome to Kuroku</h1></div>
+    
+    <style>
+        #welcome-text-id{
+            font-family: 'Segoe UI';
+            font-weight: 100;
+            font-size: 100px;
+
+            color: var(--black);
+
+            opacity: 0;
+        }
+        .welcome-text{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <script>
+        anime({
+            targets: '#welcome-text-id',
+            translateY: [-100, 0], //the slide from top to bottom //make sure u put the ',' after every code
+            opacity: [0, 1], //the fade effect
+
+            duration: 2000, //takes 2 second to complete animation
+            easing: 'easeOutExpo', //smooth start
+            delay: 500  //waits aprox 0.5s to start the process
+        })
+    </script>
+
+</body>
+</html>
