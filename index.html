@@ -1,188 +1,262 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js"></script>
-    
-    <link rel="stylesheet" href="style(1).css">
-    <script src="index(1).js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+ 
 
-    <link rel="stylesheet" href="/public/style(1).css">
-    <script src="/public/index(1).js" defer></script>
-    <title>Kuroku</title>
-    
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.1/dist/ScrollTrigger.min.js"></script>
+
+    <script src="index.js" defer></script>
+    <link rel="stylesheet" href="style.css">
+
+    <script src="/actual web/index.js" defer></script>
+    <link rel="stylesheet" href="/actual web/style.css">
+
     <style>
-        /*
-        index(1).js   >>   orbital animation
-        style(1).css  >>   welcome text + orbital animation
-        */
-    </style>
-
-    </style>
-    
-    <style>
-        :root 
-        {
-            --black: #000000;
-            --white: #ffffff;
-        }
-
-        body, html 
-        {
-            margin: 0; 
-            padding: 0;
-            width: 100%; 
-            height: 200vh;
-            font-family: 'Segoe UI', sans-serif;
-        }
         
-        .noscroll 
-        {
-            overflow: hidden !important;
+        :root{
+            --black: black;
+            --white: white;
         }
 
-        body::-webkit-scrollbar 
-        {
-            display: none;
+        .pixelify-sans-pixel{
+        font-family: "Pixelify Sans", 'Segoe UI';
+        font-optical-sizing: auto;
+        font-weight: 300;
+        font-style: normal;
         }
+
+        body{
+            margin: 0;
+            padding: 0;
+            overflow: visible;
+            background-color: var(--white);
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .welcome-animations {position: absolute;top: 0;left: 0;width: 100%;height: 100vh;z-index: 20;display: flex;justify-content: center;align-items: center;pointer-events: none; }
+        .effect-elemets {position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);z-index: 2;}
+        #effect-element-1, #effect-element-2 {position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);}
+        #effect-element-1 {background-color: black;height: 600px;width: 572px;}
+        #effect-element-2 {background-color: black;height: 300px;width: 1482px;}
+        .welcome-text-container {position: relative;z-index: 10;display: flex;gap: 30px;font-weight: 100;font-size: 90px;pointer-events: none; }
+        .mask {overflow: hidden; display: flex;align-items: center;padding: 10px 0;}
+        .kuroku-tag-mask {background-color: transparent;overflow: hidden; display: flex;position: fixed;top: 40px;left: 50%;z-index: 30; }
+        #kuroku-tag {color: white;z-index: 10;font-size: 40px;font-family: 'Segoe UI', sans-serif;font-weight: 199;opacity: 0;}
+
+        svg {filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.2));max-width: 100%;max-height: 100vh;z-index: 5; }
+        .planet-group {cursor: pointer;pointer-events: all; }
+        #sun {cursor: pointer;pointer-events: all;transition: filter 0.3s;}
+        #sun:hover {filter: brightness(1.2);}
+        #sun-text {font-family: "Pixelify Sans",'Segoe UI';font-weight: 300;font-size: 5px;fill: black;pointer-events: none;user-select: none;text-anchor: middle;dominant-baseline: middle;}
+        .planet-body {transition: filter 0.3s;}
+        .planet-group:hover .planet-body {filter: brightness(1.2);}
+        .planet-icon {opacity: 0;transition: opacity 0.3s ease;pointer-events: none;cursor: none;}
+        .planet-group:hover .planet-icon {opacity: 1;}
+        .planet-icon path {color: black; }
+        #solar-system{overflow: visible;}
+
     </style>
-</head>
-<body class="noscroll">
+    <title>Kuroku</title>
 
-    <!--Orbital animation-->
-    
-    <canvas id="starCanvas"></canvas>
-    <div class="tilt-container" id="tilt-rig">
-        <div class="viewport">
-            <svg id="master-svg" viewBox="0 0 1000 1000"></svg>
+</head>
+
+<body>
+
+
+   <body class="body">
+
+    <div class="welcome-animations">
+        <div class="effect-elemets">
+            <div id="effect-element-1"></div>
+            <div id="effect-element-2"></div>
+        </div>    
+        <div class="welcome-text-container">
+            <div class="mask">
+                <div id="welcome-h1-1">Welcome</div>
+            </div>
+            <div class="mask">
+                <div id="welcome-h1-2">to</div>
+            </div>
+            <div class="mask">
+                <div id="welcome-h1-3">Kuroku</div>
+            </div>
         </div>
     </div>
+
+    <div class="kuroku-tag-mask"><div id="kuroku-tag">Kuroku</div></div>
+
+    <svg id="solar-system" width="600" height="600" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <rect id="sun" x="45" y="45" width="10" height="10" rx="4" fill="#50C878" />
+        <text id="sun-text" x="50" y="50">Thanks for the visit :3</text>
     
-    <!--Orbital animation-->
-
-    <!--Welcome text-->
+        <g id="saturn-orbit" transform="rotate(200 50 50)">
+            <circle class="ring" cx="50" cy="50" r="46" fill="none" stroke="#2ECC71" stroke-width="0.5" stroke-dasharray="240 300" stroke-linecap="round" transform="rotate(-90 50 50)" />
+        <g transform="rotate(110 50 50)"> 
+        <g id="saturn" class="planet-group" data-link="#">
+            <circle class="planet-body" cx="50" cy="4" r="2.2" fill="#2ECC71" />
+        <g class="planet-icon" transform="translate(48.5, 2.5) scale(0.12)">
+            <path stroke="black" stroke-linecap="round" stroke-width="2" fill="none" d="M7.926 10.898 15 7.727m-7.074 5.39L15 16.29M8 12a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm12 5.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Zm0-11a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+        </g></g></g></g>
     
-    <div class="welcome-texts-container" id="welcome-text-container-id">
-        <h1 id="welcome-text-id">Welcome to</h1>
-        <h1 id="kuroku-text-id">Kuroku</h1>
-    </div>
+        <g id="jupiter-orbit" transform="rotate(30 50 50)">
+            <circle class="ring" cx="50" cy="50" r="39" fill="none" stroke="#00AD83" stroke-width="0.5" stroke-dasharray="170 200" stroke-linecap="round" transform="rotate(-90 50 50)" />
+        <g transform="rotate(150 50 50)">
+        <g id="jupiter" class="planet-group" data-link="#">
+            <circle class="planet-body" cx="50" cy="11" r="2.8" fill="#00AD83" />
+        <g class="planet-icon" transform="translate(48.5, 9.5) scale(0.12)">
+            <path stroke="black" stroke-linecap="round" stroke-width="2" fill="none" d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"/>
+        </g></g></g></g>
     
-    <!--Welcome text-->
+        <g id="mars-orbit" transform="rotate(150 50 50)">
+            <circle class="ring" cx="50" cy="50" r="32" fill="none" stroke="#00A550" stroke-width="0.5" stroke-dasharray="100 200" stroke-linecap="round" transform="rotate(-90 50 50)" />
+        <g transform="rotate(40 50 50)">
+        <g id="mars" class="planet-group" data-link="#">
+            <circle class="planet-body" cx="50" cy="18" r="1.4" fill="#00A550" />
+        <g class="planet-icon" transform="translate(48.5, 16.5) scale(0.12)">
+            <path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none" d="M13.213 9.787a3.391 3.391 0 0 0-4.795 0l-3.425 3.426a3.39 3.39 0 0 0 4.795 4.794l.321-.304m-.321-4.49a3.39 3.39 0 0 0 4.795 0l3.424-3.426a3.39 3.39 0 0 0-4.794-4.795l-1.028.961"/>
+        </g></g></g></g>
+    
+        <g id="earth-orbit" transform="rotate(-90 50 50)">
+            <circle class="ring" cx="50" cy="50" r="25" fill="none" stroke="#00C973" stroke-width="0.5" stroke-dasharray="110 100" stroke-linecap="round" transform="rotate(-90 50 50)" />
+        <g transform="rotate(120 50 50)">
+        <g id="earth" class="planet-group" data-link="#">
+            <circle class="planet-body" cx="50" cy="25" r="1.6" fill="#00C973" />
+        <g class="planet-icon" transform="translate(48.5, 23.5) scale(0.12)">
+            <path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none" d="M10 11h2v5m-2 0h4m-2.592-8.5h.01M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+        </g></g></g></g>
+    
+        <g id="venus-orbit" transform="rotate(10 50 50)">
+            <circle class="ring" cx="50" cy="50" r="18" fill="none" stroke="#50C878" stroke-width="0.5" stroke-dasharray="80 100" stroke-linecap="round" transform="rotate(-90 50 50)" />
+        <g transform="rotate(200 50 50)">
+        <g id="venus" class="planet-group" data-link="#">
+            <circle class="planet-body" cx="50" cy="32" r="1.4" fill="#50C878" />
+        <g class="planet-icon" transform="translate(49.04, 31.04) scale(0.08)">
+            <path stroke="black" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" fill="none" d="M11 9H5a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1h6m0-6v6m0-6 5.419-3.87A1 1 0 0 1 18 5.942v12.114a1 1 0 0 1-1.581.814L11 15m7 0a3 3 0 0 0 0-6M6 15h3v5H6v-5Z"/>
+        </g></g></g></g>
+    
+        <g id="mercury-orbit" transform="rotate(180 50 50)">
+            <circle class="ring" cx="50" cy="50" r="11" fill="none" stroke="#2ECC71" stroke-width="0.5" stroke-dasharray="45 100" stroke-linecap="round" transform="rotate(-90 50 50)" />
+        <g transform="rotate(60 50 50)">
+        <g id="mercury" class="planet-group" data-link="https://discord.gg/7Byxw7kcKN">
+            <circle class="planet-body" cx="50" cy="39" r="1.0" fill="#2ECC71" />
+        <g class="planet-icon" transform="translate(49.04, 38.04) scale(0.08)">
+            <path fill="black" d="M18.942 5.556a16.3 16.3 0 0 0-4.126-1.3 12.04 12.04 0 0 0-.529 1.1 15.175 15.175 0 0 0-4.573 0 11.586 11.586 0 0 0-.535-1.1 16.274 16.274 0 0 0-4.129 1.3 17.392 17.392 0 0 0-2.868 11.662 15.785 15.785 0 0 0 4.963 2.521c.41-.564.773-1.16 1.084-1.785a10.638 10.638 0 0 1-1.706-.83c.143-.106.283-.217.418-.331a11.664 11.664 0 0 0 10.118 0c.137.114.277.225.418.331-.544.328-1.116.606-1.71.832a12.58 12.58 0 0 0 1.084 1.785 16.46 16.46 0 0 0 5.064-2.595 17.286 17.286 0 0 0-2.973-11.59ZM8.678 14.813a1.94 1.94 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.918 1.918 0 0 1 1.8 2.047 1.929 1.929 0 0 1-1.8 2.045Zm6.644 0a1.94 1.94 0 0 1-1.8-2.045 1.93 1.93 0 0 1 1.8-2.047 1.919 1.919 0 0 1 1.8 2.047 1.93 1.93 0 0 1-1.8 2.045Z"/>
+        </g></g></g></g>
+    </svg>
 
-    <script>
+    <style>
+    </style>
 
-        //welcome text start
+ <script>
+        const planets = ["mercury", "venus", "earth", "mars", "jupiter", "saturn"];
+        const orbitIDs = planets.map(p => "#" + p + "-orbit");
+        const planetIDs = planets.map(p => "#" + p);
+
+        gsap.set("#welcome-h1-1", { opacity: 0, y: -250 });
+        gsap.set("#welcome-h1-2", { opacity: 0, y: 250 });
+        gsap.set("#welcome-h1-3", { opacity: 0, x: 100 });
         
-        gsap.set("#welcome-text-container-id", { 
-        position: "fixed", 
-        autoAlpha: 1,
-        zIndex: 1000 
+        gsap.set(".kuroku-tag-mask", { x: -620, y: 490 });
+        gsap.set("#kuroku-tag", { y: 40 });
+
+        gsap.set("#effect-element-1", { scaleY: 0, scaleX: 0 });
+        gsap.set("#effect-element-2", { scaleX: 0 });
+
+        planets.forEach(p => {
+            gsap.set("#" + p + "-orbit", { scale: 0, opacity: 0, transformOrigin: "50% 50%" });
         });
-        gsap.set(["#welcome-text-id", "#kuroku-text-id"], { 
-        scale: 0.27, 
-        transformOrigin: "left center" 
+        gsap.set("#solar-system", { x: 0 });
+        gsap.set("#sun", { scale: 0, opacity: 0, transformOrigin: "50% 50%", attr: { rx: 15 } });
+        gsap.set("#sun-text", { opacity: 0 });
+        gsap.set(".planet-group", { scale: 0, transformOrigin: "center center" });
+
+        gsap.to("#mercury-orbit", { rotation: "-=360", transformOrigin: "50% 50%", duration: 10, repeat: -1, ease: "none" });
+        gsap.to("#venus-orbit",   { rotation: "-=360", transformOrigin: "50% 50%", duration: 15, repeat: -1, ease: "none" });
+        gsap.to("#earth-orbit",   { rotation: "-=360", transformOrigin: "50% 50%", duration: 20, repeat: -1, ease: "none" });
+        gsap.to("#mars-orbit",    { rotation: "-=360", transformOrigin: "50% 50%", duration: 30, repeat: -1, ease: "none" });
+        gsap.to("#jupiter-orbit", { rotation: "-=360", transformOrigin: "50% 50%", duration: 40, repeat: -1, ease: "none" });
+        gsap.to("#saturn-orbit",  { rotation: "-=360", transformOrigin: "50% 50%", duration: 50, repeat: -1, ease: "none" });
+
+        const tl = gsap.timeline({ defaults: { ease: "power4.out" } });
+
+        tl.to("#welcome-h1-1", { y: 0, opacity: 1, duration: 1.5 })
+          .to("#welcome-h1-2", { y: 0, opacity: 1, duration: 1.5 }, "-=0.9") 
+          .to("#welcome-h1-3", { x: 0, opacity: 1, duration: 1.2 }, "-=0.8")
+
+          .to("#effect-element-1", { scaleY: 1, duration: 0.3 })
+          .to("#effect-element-2", { scaleX: 1, duration: 0.5 }, "-=0.2")
+          .to("#effect-element-1", { scaleX: 1, duration: 0.7 }, "-=0.3")
+          .to(["#effect-element-1", "#effect-element-2"], {
+                width: "100vw",
+                height: "100vh",
+                duration: 0.6,
+                ease: "expo.inOut",
+                stagger: 0.1 
+          }, "+=0.1")
+
+          .to(".body", { backgroundColor: "black" }, "-=0.4")
+          .to(".effect-elemets", { opacity: 0}, "-=0.3")
+
+          .to("#welcome-h1-3", { color: "white", duration: 1.5 })
+          .to("#welcome-h1-3", { y: 100, opacity: 0, duration: 1.3 })
+          .to("#kuroku-tag", { y: 0, duration: 1.3, opacity: 1 }, "-=1")
+
+          .to(".welcome-animations", { opacity: 0, duration: 1, pointerEvents: "none" }, "-=0.5")
+
+          .to("#sun", { duration: 1.2, scale: 1, opacity: 1, ease: "elastic.out(1, 0.5)" }, "-=0.5")
+          .to(orbitIDs, { duration: 1.5, scale: 1, opacity: 1, stagger: 0.2, ease: "power3.out" }, "-=0.5")
+          .to(planetIDs, { duration: 0.8, scale: 1, stagger: 0.1, ease: "back.out(1.7)" }, "-=0.5")
+
+          .to("#mercury-orbit", { x: 129, duration: 1}, "-=0.9")
+          .to("#venus-orbit", { x: 111, duration: 1},   "-=0.95")
+          .to("#earth-orbit", { x: 107, duration: 1},   "-=0.95")
+          .to("#mars-orbit", { x: 183, duration: 1},    "-=0.95")
+          .to("#jupiter-orbit", { x: 131, duration: 1}, "-=0.95")
+          .to("#saturn-orbit", { x: 179, duration: 1},  "-=0.95")
+
+          .to("#sun", { x: -40, duration: 0.7}, "-=0.6")
+          .to("#sun", { width: 70}, "-=0.2")
+          .to("#sun-text", { opacity: 1, x: -10, duration: 0.5 }, "<")
+          .to("#sun-text", {duration: 1})
+          .to("sun", { attr: {rx: 15} })
+          .to("#sun-text", {opacity: 0, duration: 0.5})
+          .to("#sun", {x: 107, duration: 0.7, width: 10});
+
+        const planetGroups = document.querySelectorAll('.planet-group');
+        planetGroups.forEach(group => {
+            group.addEventListener("mouseenter", () => {
+                gsap.to(group, { scale: 2, duration: 0.3, ease: "back.out(1.7)" });
+            });
+            group.addEventListener("mouseleave", () => {
+                gsap.to(group, { scale: 1, duration: 0.3, ease: "power2.out" });
+            });
+            group.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const link = group.getAttribute('data-link');
+                if(link && link !== "#") window.open(link, "_blank");
+            });
         });
 
- const masterTl = gsap.timeline({
-        defaults: { ease: "expo.inOut", force3D: true },
-        onComplete: startOrbitalEffect
-    });
-
-    masterTl
-
-        .fromTo("#welcome-text-id", 
-            { y: -30, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 1, delay: 0.3 }
-        )
-        .to("#welcome-text-container-id", {
-            left: "50%",
-            top: "50%",
-            xPercent: -50,
-            yPercent: -50,
-            duration: 2
-        })
-        .to(["#welcome-text-id", "#kuroku-text-id"], {
-            scale: 1,
-            duration: 2
-        }, "<") 
-        .to("#welcome-text-container-id", {
-            yPercent: -120, 
-            duration: 1.6
-        })
-        .to("#kuroku-text-id", {
-            opacity: 1,
-            filter: "blur(0px)",
-            duration: 1.2
-        }, "-=1.2"); 
-        
-        //welcome text end
-
-        //orbital animation function
-        
-        function startOrbitalEffect() {
-        const transitionTl = gsap.timeline({
-            onComplete: startScrollPhase
+        const sun = document.querySelector("#sun");
+        sun.addEventListener("mouseenter", () => {
+            gsap.to(sun, { scale: 1.2, duration: 0.3, ease: "back.out(1.7)" });
         });
-        
-        transitionTl
-            .to("body", { backgroundColor: "#000000", duration: 1.5 })
-            .to(".welcome-texts-container h1", { color: "#ffffff", duration: 1.5 }, "<")
-            .to(["#starCanvas", ".tilt-container"], { opacity: 1, duration: 2 }, "-=1");
-
-        if (typeof ringGroups !== 'undefined') {
-            transitionTl.to(ringGroups, {
-                scale: 1, opacity: 0.6, duration: 2, stagger: 0.15, ease: "expo.out"
-            }, "-=1.5");
-        }}
-        
-        //orbital animation function   
-
-        //after orbital animation function
-
-        function startScrollPhase() {
-        gsap.registerPlugin(ScrollTrigger);
-
-        document.body.classList.remove("noscroll");
-        document.documentElement.classList.remove("noscroll");
-        
-        const scrollTl = gsap.timeline({
-            scrollTrigger: {
-                trigger: 'body',
-                start: 'top top',
-                end: '+=600',
-                scrub: 1,
-            }
+        sun.addEventListener("mouseleave", () => {
+            gsap.to(sun, { scale: 1, duration: 0.3, ease: "power2.out" });
         });
-
-        scrollTl
-   
-            .to("#welcome-text-id", {
-                opacity: 0,
-                width: 0,
-                marginRight: 0,
-                duration: 0.5
-            }, 0)
-
-            .to("#welcome-text-container-id", {
-                left: "30px",       
-                top: "100%",        
-                xPercent: 0,        
-                yPercent: -100,     
-                y: -30,            
-                duration: 1
-            }, 0)
-
-            .to("#kuroku-text-id", {
-                scale: 0.5,
-                transformOrigin: "left bottom",
-                duration: 1
-            }, 0);}
-        
-        //after orbital animation function
-        
     </script>
 </body>
+
 </html>
